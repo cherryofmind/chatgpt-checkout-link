@@ -1,28 +1,127 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8">
-<title>Оплата ChatGPT — ссылка Stripe</title>
-<style>
-  body { font-family: system-ui, sans-serif; display:flex; align-items:center; justify-content:center; height:100vh; margin:0; background:#0d1117; color:#f0f6fc; }
-  .box { text-align:center; max-width:600px; }
-  h1 { font-size:22px; margin-bottom:16px; }
-  p { margin:12px 0; line-height:1.5; }
-  a.btn { display:inline-block; font-size:18px; font-weight:600; padding:16px 24px; border-radius:12px; background:#2da44e; color:#fff; text-decoration:none; }
-  a.btn:hover { background:#2c974b; }
-  code { background:#161b22; padding:2px 6px; border-radius:6px; }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ссылка на оплату ChatGPT — старый Stripe</title>
+  <meta name="description" content="Одна кнопка‑закладка, чтобы получить ссылку на оплату ChatGPT старого образца (Stripe). Также есть альтернативная инструкция через консоль." />
+  <style>
+    :root{
+      --bg: #0b1220;
+      --bg2:#0e152a;
+      --card:#0f182b;
+      --fg:#e8eefc;
+      --mut:#a6b0c3;
+      --accent:#7dd3fc;
+      --accent2:#60a5fa;
+      --btn:#10b981;
+      --btn2:#0ea5e9;
+      --stroke:#1f2a44;
+      --shadow: 0 20px 50px rgba(0,0,0,.45), 0 4px 18px rgba(30,64,175,.25);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font:16px/1.55 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; color:var(--fg);
+      background: radial-gradient(1000px 600px at 20% -10%, #0ea5e933, transparent),
+                  radial-gradient(900px 500px at 110% 10%, #22c55e22, transparent),
+                  linear-gradient(180deg, var(--bg), var(--bg2));}
+    .wrap{min-height:100%; display:grid; place-items:center; padding:28px}
+    .card{width:min(950px, 100%); background:linear-gradient(180deg, #0f172a, #0b1326); border:1px solid var(--stroke); border-radius:20px; box-shadow:var(--shadow); padding:28px 26px}
+    header{display:flex; gap:16px; align-items:center; margin-bottom:14px}
+    header .logo{width:44px; height:44px; display:grid; place-items:center; border-radius:12px; 
+      background: radial-gradient(140px 80px at 30% 0%, #22d3ee40, transparent), linear-gradient(180deg, #0b1220, #132037); border:1px solid #223153}
+    h1{font-size:24px; margin:0}
+    .mut{color:var(--mut)}
+    .grid{display:grid; grid-template-columns: 1.1fr .9fr; gap:22px; margin-top:16px}
+    @media (max-width: 880px){ .grid{grid-template-columns:1fr} }
+
+    .panel{background:linear-gradient(180deg, #0b1426, #0a1222); border:1px solid var(--stroke); border-radius:16px; padding:18px}
+    .panel h2{margin:0 0 8px; font-size:18px}
+    .panel p{margin:8px 0}
+    .panel ol{margin:10px 0 0 22px}
+    .panel li{margin:8px 0}
+    code, .kbd{background:#0b162b; border:1px solid #1e2b4a; border-radius:8px; padding:2px 6px}
+    .kbd{padding:3px 7px; font-weight:600}
+
+    .cta{
+      display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:10px 0 14px
+    }
+    .btn{display:inline-block; padding:16px 20px; border-radius:14px; text-decoration:none; color:#081018; font-weight:800; letter-spacing:.2px;
+      background:linear-gradient(180deg, #34d399, #10b981); box-shadow:0 10px 24px rgba(16,185,129,.25), inset 0 1px 0 #ecfdf5; border:1px solid #059669}
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0)}
+    .btn.secondary{color:#081018; background:linear-gradient(180deg, #60a5fa, #3b82f6); border-color:#2563eb; box-shadow:0 10px 24px rgba(59,130,246,.25), inset 0 1px 0 #dbeafe}
+
+    .note{font-size:14px; color:var(--mut)}
+
+    .links{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px}
+    .chip{display:inline-block; padding:10px 14px; border-radius:12px; border:1px solid var(--stroke); background:linear-gradient(180deg,#0b1426,#0a1222)}
+    .chip a{color:#cde1ff; text-decoration:none}
+
+    /* Pretty blockquote */
+    .quote{border-left:3px solid #2563eb; padding-left:12px; color:#c5d0e6}
+  </style>
 </head>
 <body>
-  <div class="box">
-    <h1>Ссылка на оплату ChatGPT (старый Stripe)</h1>
-    <p>➊ Перетащите кнопку ниже на панель закладок:</p>
-    <p>
-      <a class="btn" href="javascript:(async()=>{try{const s=await fetch('/api/auth/session',{credentials:'include'});const j=await s.json();if(!j?.accessToken){alert('Зайдите на chatgpt.com под своим аккаунтом и попробуйте снова');return}const a={plan_name:'chatgptplusplan',billing_details:{country:'US',currency:'USD'},promo_code:null,checkout_ui_mode:'redirect'};const r=await fetch('https://chatgpt.com/backend-api/payments/checkout',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json','authorization':`Bearer ${j.accessToken}`},body:JSON.stringify(a)});const d=await r.json();if(!d?.url){alert('Не удалось получить ссылку. Возможно включён новый метод оплаты.');return}prompt('Скопируйте ссылку на оплату (старого образца):',d.url);}catch(e){alert('Ошибка: '+e.message)}})();">Получить ссылку Stripe</a>
-    </p>
-    <p>➋ Откройте <a href="https://chatgpt.com" target="_blank" style="color:#58a6ff">chatgpt.com</a> и войдите в аккаунт.</p>
-    <p>➌ Нажмите сохранённую закладку. Появится окно со ссылкой вида <code>https://checkout.stripe.com/...</code>.</p>
-    <p>➍ Скопируйте ссылку и отправьте её нам.</p>
+  <div class="wrap">
+    <div class="card">
+      <header>
+        <div class="logo">💳</div>
+        <div>
+          <h1>Ссылка на оплату ChatGPT — старый Stripe</h1>
+          <div class="mut">Самый простой способ — перетащите кнопку в закладки и нажмите её на <b>chatgpt.com</b>.</div>
+        </div>
+      </header>
+
+      <div class="grid">
+        <!-- Левая колонка: кнопка-букмарклет и подсказка про ПКМ/перетаскивание -->
+        <section class="panel">
+          <h2>Вариант 1 — кнопка‑закладка (рекомендуется)</h2>
+          <p>
+            <span class="quote">Совет:</span> <b>Зажмите ЛКМ и перетащите</b> кнопку ниже на панель закладок.
+            Если не получается — <b>клик правой кнопкой (ПКМ)</b> → «Добавить в закладки». На <b>chatgpt.com</b> просто нажмите эту закладку.
+          </p>
+          <div class="cta">
+            <a class="btn" title="Перетащите в панель закладок"
+               href="javascript:(async()=>{try{const s=await fetch('/api/auth/session',{credentials:'include'});const j=await s.json();if(!j?.accessToken){alert('Зайдите на chatgpt.com под своим аккаунтом и попробуйте снова');return}const a={plan_name:'chatgptplusplan',billing_details:{country:'US',currency:'USD'},promo_code:null,checkout_ui_mode:'redirect'};const r=await fetch('https://chatgpt.com/backend-api/payments/checkout',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json','authorization':`Bearer ${j.accessToken}`},body:JSON.stringify(a)});const d=await r.json();if(!d?.url){alert('Не удалось получить ссылку. Возможно включён новый метод оплаты.');return}prompt('Скопируйте ссылку на оплату (старого образца):',d.url);}catch(e){alert('Ошибка: '+(e&&e.message?e.message:e))}})();">Получить ссылку Stripe</a>
+            <a class="btn secondary" href="https://chatgpt.com" target="_blank" rel="noopener">Открыть chatgpt.com</a>
+          </div>
+          <p class="note">После клика по закладке появится окно со ссылкой вида <code>https://checkout.stripe.com/...</code> — скопируйте её.</p>
+        </section>
+
+        <!-- Правая колонка: альтернативная инструкция через консоль -->
+        <section class="panel">
+          <h2>Вариант 2 — альтернативный способ (через консоль)</h2>
+          <ol>
+            <li>Зайдите на сайт <b>https://chatgpt.com</b> и войдите в свой аккаунт.</li>
+            <li>Нажмите клавишу <span class="kbd">F12</span> (или <span class="kbd">Ctrl</span>+<span class="kbd">Shift</span>+<span class="kbd">I</span>) — откроется окно разработчика.</li>
+            <li>Перейдите во вкладку <b>Console</b>.</li>
+            <li>Перейдите по ссылке и скопируйте код:<br/>
+              👉 <a href="https://playcode.io/2541097" target="_blank" rel="noopener">https://playcode.io/2541097</a>
+            </li>
+            <li>В консоли напишите команду: <code>allow pasting</code> и нажмите <b>Enter</b>.</li>
+            <li>Теперь вставьте этот код и нажмите <b>Enter</b>:<br/>
+              <code>https://playcode.io/2541097</code>
+            </li>
+            <li>В консоли появится ссылка. Она должна начинаться с:<br/>
+              <code>https://checkout.stripe.com/...</code>
+            </li>
+            <li>Скопируйте эту ссылку и отправьте её нам.</li>
+          </ol>
+          <p class="note">Если вместо Stripe-ссылки появляется <code>https://chatgpt.com/checkout/...</code> — на аккаунте включён новый метод оплаты. Пришлите эту ссылку нам.</p>
+        </section>
+      </div>
+
+      <section class="panel" style="margin-top:22px">
+        <h2>Наши магазины и контакты</h2>
+        <div class="links">
+          <span class="chip"><a href="https://plati.market/seller/hmmml/1137274/" target="_blank" rel="noopener">🛒 hmmml shop — Plati.market</a></span>
+          <span class="chip"><a href="https://hmmml.com/" target="_blank" rel="noopener">🌐 hmmml.com</a></span>
+          <span class="chip"><a href="https://ggsel.net/sellers/1137274" target="_blank" rel="noopener">🛍️ GGSEL — профиль продавца</a></span>
+          <span class="chip"><a href="https://wmcentre.net/seller/hmmml-1137274" target="_blank" rel="noopener">🧾 WMCentre — профиль продавца</a></span>
+        </div>
+      </section>
+    </div>
   </div>
 </body>
 </html>
