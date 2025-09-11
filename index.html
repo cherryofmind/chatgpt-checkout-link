@@ -2,41 +2,27 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Ссылка на оплату ChatGPT (старый Stripe)</title>
+<title>Оплата ChatGPT — ссылка Stripe</title>
 <style>
-  :root { --bg:#0b0c10; --fg:#e8e8e8; --mut:#9aa0a6; --btn:#ffffff; }
-  html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial;}
-  .wrap{min-height:100%;display:grid;place-items:center;padding:24px}
-  .card{max-width:720px;width:100%;background:#111316;border:1px solid #20242a;border-radius:16px;padding:28px;box-shadow:0 8px 28px rgba(0,0,0,.4)}
-  h1{margin:0 0 8px;font-size:20px}
-  p{margin:0 0 14px}
-  .mut{color:var(--mut);font-size:14px}
-  .btn{display:inline-block;padding:14px 18px;border-radius:12px;border:1px solid #2b3138;background:var(--btn);color:#111;font-weight:700;text-decoration:none}
-  .steps{margin-top:16px}
-  .steps li{margin:6px 0}
-  code{background:#0f1318;border:1px solid #222831;border-radius:6px;padding:2px 6px}
+  body { font-family: system-ui, sans-serif; display:flex; align-items:center; justify-content:center; height:100vh; margin:0; background:#0d1117; color:#f0f6fc; }
+  .box { text-align:center; max-width:600px; }
+  h1 { font-size:22px; margin-bottom:16px; }
+  p { margin:12px 0; line-height:1.5; }
+  a.btn { display:inline-block; font-size:18px; font-weight:600; padding:16px 24px; border-radius:12px; background:#2da44e; color:#fff; text-decoration:none; }
+  a.btn:hover { background:#2c974b; }
+  code { background:#161b22; padding:2px 6px; border-radius:6px; }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="card">
+  <div class="box">
     <h1>Ссылка на оплату ChatGPT (старый Stripe)</h1>
-    <p class="mut">Добавьте кнопку в закладки, затем нажмите её уже на <code>chatgpt.com</code>.</p>
-
-    <!-- ОДНА КНОПКА-БУКМАРКЛЕТ -->
-    <p><a class="btn" title="Перетащите в панель закладок"
-href="javascript:(async()=>{try{const s=await fetch('/api/auth/session',{credentials:'include'});const j=await s.json();if(!j?.accessToken){alert('Зайдите на chatgpt.com под своим аккаунтом и попробуйте снова');return}const a={plan_name:'chatgptplusplan',billing_details:{country:'US',currency:'USD'},promo_code:null,checkout_ui_mode:'redirect'};const r=await fetch('https://chatgpt.com/backend-api/payments/checkout',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json','authorization':`Bearer ${j.accessToken}`},body:JSON.stringify(a)});const d=await r.json();if(!d?.url){alert('Не удалось получить ссылку. Возможно включён новый способ оплаты.');return}prompt('Скопируйте ссылку на оплату (старого образца):',d.url);}catch(e){alert('Ошибка: '+(e&&e.message?e.message:e))}})();">Получить ссылку Stripe</a></p>
-
-    <ol class="steps">
-      <li><b>Добавьте кнопку в закладки</b>: перетащите её на панель закладок
-        <span class="mut">(или ПКМ → «Добавить в закладки»)</span>.</li>
-      <li>Откройте <a href="https://chatgpt.com" target="_blank" rel="noopener">chatgpt.com</a> и войдите в аккаунт.</li>
-      <li>Нажмите сохранённую закладку. Появится окно со ссылкой вида <code>https://checkout.stripe.com/...</code> — скопируйте её.</li>
-    </ol>
-
-    <p class="mut">Если вместо Stripe-ссылки появляется <code>https://chatgpt.com/checkout/...</code> — на аккаунте включён новый метод оплаты. Пришлите эту ссылку нам.</p>
+    <p>➊ Перетащите кнопку ниже на панель закладок:</p>
+    <p>
+      <a class="btn" href="javascript:(async()=>{try{const s=await fetch('/api/auth/session',{credentials:'include'});const j=await s.json();if(!j?.accessToken){alert('Зайдите на chatgpt.com под своим аккаунтом и попробуйте снова');return}const a={plan_name:'chatgptplusplan',billing_details:{country:'US',currency:'USD'},promo_code:null,checkout_ui_mode:'redirect'};const r=await fetch('https://chatgpt.com/backend-api/payments/checkout',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json','authorization':`Bearer ${j.accessToken}`},body:JSON.stringify(a)});const d=await r.json();if(!d?.url){alert('Не удалось получить ссылку. Возможно включён новый метод оплаты.');return}prompt('Скопируйте ссылку на оплату (старого образца):',d.url);}catch(e){alert('Ошибка: '+e.message)}})();">Получить ссылку Stripe</a>
+    </p>
+    <p>➋ Откройте <a href="https://chatgpt.com" target="_blank" style="color:#58a6ff">chatgpt.com</a> и войдите в аккаунт.</p>
+    <p>➌ Нажмите сохранённую закладку. Появится окно со ссылкой вида <code>https://checkout.stripe.com/...</code>.</p>
+    <p>➍ Скопируйте ссылку и отправьте её нам.</p>
   </div>
-</div>
 </body>
 </html>
