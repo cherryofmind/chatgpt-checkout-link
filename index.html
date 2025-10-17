@@ -86,7 +86,7 @@
                href="javascript:(async()=>{try{const s=await fetch('/api/auth/session',{credentials:'include'});const j=await s.json();if(!j?.accessToken){alert('Зайдите на chatgpt.com под своим аккаунтом и попробуйте снова');return}const a={plan_name:'chatgptplusplan',billing_details:{country:'US',currency:'USD'},promo_code:null,checkout_ui_mode:'redirect'};const r=await fetch('https://chatgpt.com/backend-api/payments/checkout',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json','authorization':`Bearer ${j.accessToken}`},body:JSON.stringify(a)});const d=await r.json();if(!d?.url){alert('Не удалось получить ссылку. Возможно включён новый метод оплаты.');return}prompt('Скопируйте ссылку на оплату (старого образца):',d.url);}catch(e){alert('Ошибка: '+(e&&e.message?e.message:e))}})();">Получить ссылку Stripe</a>
             <a class="btn secondary" href="https://chatgpt.com" target="_blank" rel="noopener">Открыть chatgpt.com</a>
           </div>
-          <p class="note">После клика по закладке появится окно со ссылкой вида <code>https://checkout.stripe.com/...</code> — скопируйте её.</p>
+          <p class="note">После клика по закладке появится окно со ссылкой вида <code>https://pay.openai.com/c/pay/...</code> — скопируйте её.</p>
         </section>
 
         <!-- Правая колонка: альтернативная инструкция через консоль -->
@@ -108,7 +108,7 @@
             </li>
             <li>Скопируйте эту ссылку и отправьте её нам.</li>
           </ol>
-          <p class="note">Если вместо Stripe-ссылки появляется <code>https://chatgpt.com/checkout/...</code> — на аккаунте включён новый метод оплаты. Пришлите эту ссылку нам.</p>
+          <p class="note">Если вместо Stripe-ссылки появляется <code>https://pay.openai.com/c/pay...</code> — на аккаунте включён новый метод оплаты. Пришлите эту ссылку нам.</p>
         </section>
       </div>
     </div>
